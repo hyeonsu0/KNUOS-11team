@@ -15,7 +15,8 @@
     - 시각화 : 서영은
 
 ### 4. 일정
-    ![plan](https://user-images.githubusercontent.com/70935190/120068234-7b4c9a80-c0ba-11eb-97c5-6bfafc23be39.png)
+![plan](https://user-images.githubusercontent.com/70935190/120068254-8dc6d400-c0ba-11eb-8e84-61f0616208fa.png)
+
 
 
 ### 5. 참고자료
