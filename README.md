@@ -15,11 +15,7 @@
     - 시각화 : 서영은
 
 ### 4. 일정
-    - 진행 상황
-    
-    
-    - 향후 일정
-    
+    ![plan](https://user-images.githubusercontent.com/70935190/120068234-7b4c9a80-c0ba-11eb-97c5-6bfafc23be39.png)
 
 
 ### 5. 참고자료
