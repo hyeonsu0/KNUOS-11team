@@ -7,6 +7,7 @@
     상승 중인 주식을 정렬한 후 동일 업종을 시각화
 
 ### 2. 프로젝트 구조
+![system](https://user-images.githubusercontent.com/70935190/120093661-b3092000-c156-11eb-9bb8-48556df49767.png)
 
 
 ### 3. 팀원별 역할 분담
