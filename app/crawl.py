@@ -1,22 +1,8 @@
 import re
 import requests
 import sys
+import my_pkg
 from bs4 import BeautifulSoup
-
-es_host = "127.0.0.1"
-es_port = "9200"
-
-class jusik:
-    def setdata(self, name, price, price_gap, ratio, individual_code):
-        self.name = name
-        self.price = price
-        self.price_gap = price_gap
-        self.ratio = ratio
-        self.individual_code = individual_code
-    #def get_upjong(self):
-        #url = u"https://finance.naver.com/item/main.nhn?code="+self.individual_code
-        #upjong_code = 9999
-        #return upjong_code
 
 def get_clearcode(code):
     code = ''.join(list(filter(str.isdigit,code)))
@@ -40,18 +26,20 @@ def getData(url):
         price = tds[2].get_text()
         price_gap = tds[3].get_text().strip()
         ratio = tds[4].get_text().strip()
-        print("No : " + no + " 종목명 : " + name + " price : " + price + " price_gap : " + price_gap + " ratio : " + ratio + " individual_code : " + individual_code)
+        data = {
+                'no' : no,
+                'name' : name,
+                'price' : price,
+                'price_gap' : price_gap,
+                'ratio' : ratio,
+                'individual_code' : individual_code}
+        res = my_pkg.insert(data)
+        print(res)
 
 
 if __name__ == '__main__':
-    es_index = 'finance'
-    es_type_fluct = "fluct"
-    es_type_category = "category"
-
-    jusik_list = []
-
-    url_rise = u'https://finance.naver.com/sise/sise_rise.nhn'
-
-    getData(url_rise)
+	url_rise = u'https://finance.naver.com/sise/sise_rise.nhn'
+	my_pkg.create_index()
+	getData(url_rise)
 
 
