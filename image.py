@@ -9,21 +9,21 @@ def mktree(names, ratios):
 	colors=[]
 	for ratio in ratios:
 		if ratio > 25:
-			colors.append(red)
+			colors.append("red")
 		elif ratio > 20:
-			colors.append(r)
+			colors.append("r")
 		elif ratio > 15:
-			colors.append(darkred)
+			colors.append("darkred")
 		elif ratio > 10:
-			colors.append(firebrick)
+			colors.append("firebrick")
 		elif ratio > 5:
-			colors.append(indianred)
+			colors.append("indianred")
 		elif ratio > 0:
-			colors.append(rosybrown)
+			colors.append("rosybrown")
 
 	squarify.plot(sizes=ratios, label=names, color=colors, alpha=1.0)
-	pix.axis('off')
-	pix.show()
+	plt.axis('off')
+	plt.show()
 
 	if __name__ == '__main__':
 		names=['a','b','c','d','e']
