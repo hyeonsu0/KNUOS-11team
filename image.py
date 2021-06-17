@@ -20,8 +20,8 @@ def mktree(names, ratios):
 			colors.append("indianred")
 		elif ratio > 0:
 			colors.append("rosybrown")
-
-	squarify.plot(sizes=ratios, label=names, color=colors, alpha=1.0)
+	pr = zip(names, ratios)
+	squarify.plot(sizes=ratios, label=pr, color=colors, alpha=1.0)
 	plt.axis('off')
 	plt.show()
 
