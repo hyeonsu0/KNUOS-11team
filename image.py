@@ -1,28 +1,31 @@
 #!/usr/bin/python3
 #-*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
+import squarify
+import pandas as pd
 
-import tkinter as tk
+def mktree(names, ratios):
+	colors=[]
+	for ratio in ratios:
+		if ratio > 25:
+			colors.append(red)
+		elif ratio > 20:
+			colors.append(r)
+		elif ratio > 15:
+			colors.append(darkred)
+		elif ratio > 10:
+			colors.append(firebrick)
+		elif ratio > 5:
+			colors.append(indianred)
+		elif ratio > 0:
+			colors.append(rosybrown)
 
+	squarify.plot(sizes=ratios, label=names, color=colors, alpha=1.0)
+	pix.axis('off')
+	pix.show()
 
-def mkCanvas(txt, n):
-	mw=tk.Tk()
-	if n > 0:
-		canvas=tk.Canvas(mw, bg='yellowgreen')
-		canvas.pack()
-	elif n < 0:
-		canvas=tk.Canvas(mw, bg='maroon')
-		canvas.pack()
-
-	frame = tk.Frame(canvas, width=30, height=30)
-	canvas.create_window((100,70), window=frame, anchor='nw')
-	button = tk.Button(frame, width = 10, height = 2, font = ("나눔고딕코딩", 20), text=txt)
-	button.pack()
-	canvas.create_text((180,180) , font = ("나눔고딕코딩", 20) , text=n);
-	mw.mainloop()
-
-if __name__ == '__main__':
-	names=['a','b']	
-	ratios=[+10, -10]
-	for name, ratio in zip(names, ratios):
-		mkCanvas(name, ratio)
+	if __name__ == '__main__':
+		names=['a','b','c','d','e']
+		ratios =[4,9,14,19,24]
+		mktree(names,ratios)
