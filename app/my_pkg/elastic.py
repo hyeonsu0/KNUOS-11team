@@ -3,21 +3,20 @@ from elasticsearch import Elasticsearch
 
 url = "127.0.0.1"
 port = "9200"
-index = "finance"
-doc_type = "fluct"
+es = Elasticsearch(f'{url}:{port}')
 
-def create_index():
+def create_index(index):
 	if not es.indices.exists(index=index):
 		return es.indices.create(index=index)
 
-def delete_index():
+def delete_index(index):
 	if es.indices.exists(index=index):
 		return es.indices.delete(index=index)
 
-def insert(body):
+def insert(index, doc_type, body):
 	return es.index(index=index, doc_type=doc_type, body=body)
 
-def delete(data):
+def delete(index, data):
 	if data is None:
 		data = {"match_all": {}}
 	else:
@@ -25,10 +24,10 @@ def delete(data):
 	body = {"query": data }
 	return es.delete_by_query(index, body=body)
 
-def delete_by_id(id):
+def delete_by_id(index, id):
 	return es.delete(index, id=id)
 
-def search(data=None):
+def search(index, data=None):
 	if data is None:
 		data = {"match_all": {}}
 	else:
@@ -37,7 +36,7 @@ def search(data=None):
 	res = es.search(index=index, body=body)
 	return res
 
-def updata(id, doc):
+def updata(index, doc_type, id, doc):
 	body = {
 		'doc': doc
 	}

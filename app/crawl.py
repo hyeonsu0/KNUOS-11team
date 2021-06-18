@@ -33,13 +33,16 @@ def getData(url):
                 'price_gap' : price_gap,
                 'ratio' : ratio,
                 'individual_code' : individual_code}
-        res = my_pkg.insert(data)
+        res = my_pkg.insert(index, doc_type, data)
         print(res)
 
 
 if __name__ == '__main__':
 	url_rise = u'https://finance.naver.com/sise/sise_rise.nhn'
-	my_pkg.create_index()
-	getData(url_rise)
+	index = "20210618"
+	doc_type = "finance"
+#	my_pkg.create_index(index) # index 생성
+#	getData(url_rise) # 해당일의 index가 없을경우 Crawl
+	print(my_pkg.search('finance')) #index를 파라미터로 데이터가져오기
 
 
