@@ -22,8 +22,8 @@ def get_index():
 
 def getData():
     index = get_index()
-#    if not create_index(index): # index 생성
-#        return False
+    if not create_index(index): # index 생성
+        return False
     url = url_rise
     result = ""
     res = requests.get(url)
