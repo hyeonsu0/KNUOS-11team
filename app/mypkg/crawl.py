@@ -16,10 +16,14 @@ def get_clearcode(code):
     code = ''.join(list(filter(str.isdigit,code)))
     return code
 
+def get_index():
+	index = time.strftime('%Y%m%d',time.localtime(time.time()))
+	return index
+
 def getData():
-    index = time.strftime('%Y%m%d',time.localtime(time.time()))
-    if not create_index(index): # index 생성
-        return False
+    index = get_index()
+#    if not create_index(index): # index 생성
+#        return False
     url = url_rise
     result = ""
     res = requests.get(url)
@@ -47,7 +51,7 @@ def getData():
                 'individual_code' : individual_code}
         res = insert(index, doc_type, data)
         print(res)
-        return True
+    return True
 
 def create_index(index):
 	if not es.indices.exists(index=index):
@@ -62,9 +66,11 @@ def search(index, data=None):
 		data = {"match_all": {}}
 	else:
 		data = {"match": data}
-	body = {"query": data}
+	body = {
+		"size":50,
+		"query": data}
 	res = es.search(index=index, body=body)
-	return res
+	return res['hits']['hits']
 
 
 
