@@ -33,9 +33,9 @@ def mktree(names, ratios, rp):
 		elif ratio > 0:
 			colors.append("rosybrown")
 	pr=list(map(lambda x: f'{x[0]}\n{x[1]}',zip(names,  rp)))
-	squarify.plot(sizes=ratios, label=pr, color=colors, text_kwargs={"fontproperties": fontprop},  bar_kwargs=dict(linewidth=3,edgecolor="#eee"))
+	squarify.plot(sizes=ratios, label=pr, color=colors, text_kwargs={"fontproperties": fontprop, "fontsize": 8, "color": "white"},  bar_kwargs=dict(linewidth=3,edgecolor="#eee"))
 	plt.axis('off')
-	plt.savefig('static/images1/treemap.png')
+	plt.savefig('static/images/treemap.png')
 	
 @app.route('/')
 def index():
@@ -56,7 +56,7 @@ def crawl():
 			except:
 				mypkg.getData()
 		res = mypkg.search(index)
-	return render_template('crawl.html',image_file='images1/treemap.png')
+	return render_template('crawl.html',image_file='images/treemap.png')
 #res[0]['_source'] 첫번째 항목 데이터전체
 #res[0]['_source']['name'] 첫번째 항목의 종목명
 #res[0]['_source']['price'] 첫번째 항목의 현재가
