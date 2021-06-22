@@ -1,22 +1,32 @@
 from flask import Flask, render_template, request
 import mypkg
 import pandas as pd
+import re
 
 app = Flask(__name__)
 
 def mkcsv(datas):
 	temp = []
-	temp0 = {'no':'no','name':'name', 'price':'price', 'price_gap':'price_gap', 'ratio':'ratio', 'individual_code':'ticker'}
-#	temp0 = {'no','name', 'price'. 'price_gap'. 'ratio', 'ticker'}
-	temp01 = {'no':'','name':'', 'price':''}
+	temp0 = {'name':'name', 'parent':'parent','value':'value','price':'price','ratio':'ratio', 'ticker':'ticker'}
+	temp01 = {'name':'Orgin','parent':'','value':'','price':'','raito':'','ticker':''}
 	temp.append(temp0)
 	temp.append(temp01)
 	for data in datas:
-		temp2 = data['_source']
+		temp2 ={'name':data['_source']['name'],
+'parent':'Origin', 
+'value':float(re.findall(r'\d+.\d+',data['_source']['ratio'])[0]), 'price':data['_source']['price'],
+'ratio':data['_source']['ratio'],
+'ticker':data['_source']['individual_code']}
+
 		temp.append(temp2)
 	dataframe = pd.DataFrame(temp)
 	dataframe.to_csv("./templates/asdf.csv", header=False, index=False)
-	
+#res[0]['_source'] 첫번째 항목 데이터전체
+#res[0]['_source']['name'] 첫번째 항목의 종목명
+#res[0]['_source']['price'] 첫번째 항목의 현재가
+#res[0]['_source']['price_gap'] 첫번째 항목의 전일비
+#res[0]['_source']['ratio'] 첫번째 항목의 등락률
+#res[0]['_source']['individual_code'] 첫번째 항목의 종목코드	
 	
 
 @app.route('/')
