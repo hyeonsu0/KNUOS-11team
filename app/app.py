@@ -1,7 +1,23 @@
 from flask import Flask, render_template, request
 import mypkg
+import pandas as pd
 
 app = Flask(__name__)
+
+def mkcsv(datas):
+	temp = []
+	temp0 = {'no':'no','name':'name', 'price':'price', 'price_gap':'price_gap', 'ratio':'ratio', 'individual_code':'ticker'}
+#	temp0 = {'no','name', 'price'. 'price_gap'. 'ratio', 'ticker'}
+	temp01 = {'no':'','name':'', 'price':''}
+	temp.append(temp0)
+	temp.append(temp01)
+	for data in datas:
+		temp2 = data['_source']
+		temp.append(temp2)
+	dataframe = pd.DataFrame(temp)
+	dataframe.to_csv("./templates/asdf.csv", header=False, index=False)
+	
+	
 
 @app.route('/')
 def index():
@@ -22,7 +38,8 @@ def crawl():
 			except:
 				mypkg.getData()
 		res = mypkg.search(index) 
-		return render_template('crawl.html', data = res)
+		mkcsv(res)
+		return render_template('crawl.html')
 #res[0]['_source'] 첫번째 항목 데이터전체
 #res[0]['_source']['name'] 첫번째 항목의 종목명
 #res[0]['_source']['price'] 첫번째 항목의 현재가

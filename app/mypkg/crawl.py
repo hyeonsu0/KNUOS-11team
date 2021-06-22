@@ -70,7 +70,7 @@ def search(index, data=None):
 	else:
 		data = {"match": data}
 	body = {
-		"size":50,
+		"size":30,
 		"query": data}
 	res = es.search(index=index, body=body)
 	return res['hits']['hits']
