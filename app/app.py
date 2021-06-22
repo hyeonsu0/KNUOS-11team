@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 import mypkg
 import pandas as pd
 import re
@@ -20,7 +20,7 @@ def mkcsv(datas):
 
 		temp.append(temp2)
 	dataframe = pd.DataFrame(temp)
-	dataframe.to_csv("./templates/asdf.csv", header=False, index=False)
+	dataframe.to_csv("./static/asdf.csv", header=False, index=False)
 #res[0]['_source'] 첫번째 항목 데이터전체
 #res[0]['_source']['name'] 첫번째 항목의 종목명
 #res[0]['_source']['price'] 첫번째 항목의 현재가
@@ -31,25 +31,20 @@ def mkcsv(datas):
 
 @app.route('/')
 def index():
-	return render_template('home.html')
-
-@app.route('/crawl', methods=['GET', 'POST'])
-def crawl():
-	if request.method == 'GET':
-		index = mypkg.get_index()
+	index = mypkg.get_index()
+	try:
+		res = mypkg.search(index)
+		if len(res) <10:
+			mypkg.getData()
+	except:
 		try:
-			res = mypkg.search(index)
-			if len(res) <10:
-				mypkg.getData()
+			mypkg.delete_index(index)
+			mypkg.getData()
 		except:
-			try:
-				mypkg.delete_index(index)
-				mypkg.getData()
-			except:
-				mypkg.getData()
-		res = mypkg.search(index) 
-		mkcsv(res)
-		return render_template('crawl.html')
+			mypkg.getData()
+	res = mypkg.search(index) 
+	mkcsv(res)
+	return render_template('crawl.html')
 #res[0]['_source'] 첫번째 항목 데이터전체
 #res[0]['_source']['name'] 첫번째 항목의 종목명
 #res[0]['_source']['price'] 첫번째 항목의 현재가
@@ -58,13 +53,6 @@ def crawl():
 #res[0]['_source']['individual_code'] 첫번째 항목의 종목코드
 
 if __name__ == '__main__':
-	try:
-		parser = argparse.ArgumentParser(description="")
-		parser.add_argument('--listen-port', type=str, requierd=True, help='REST service listen port')
-		args = parser.parse_args()
-	except Exception as e:
-		print('Error: %s' % str(e))
-
 	ipaddr = "127.0.0.1"
 	listen_port = "5000"
 	print ("Starting the service with ip_addr=" + ipaddr)

@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<script src="https://d3js.org/d3.v4.js"></script>
-		<link rel="stylesheet" href="C:/KNUOS-11team-main/KNUOS-11team-main/app/templates/style.css">
+		<link rel="stylesheet" href= {{url_for('static', filename='style.css')}}>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -36,7 +36,7 @@
 			"translate(" + margin.left + "," + margin.top + ")");
 	
 		// Read data
-		d3.csv("https://raw.githubusercontent.com/hyeonsu0/KNUOS-11team/main/app/templates/asdf.csv", function(data) {
+		d3.csv("{{url_for('static', filename='asdf.csv')}}",function(data) {
 		var root = d3.stratify()
 			.id(function(d) { return d.name; })   // Name of the entity (column name is name in csv)
 			.parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
