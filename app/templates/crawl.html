@@ -1,66 +1,117 @@
-<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<!DOCTYPE html>
 <meta charset="utf-8">
 <html>
 	<head>
 		<script src="https://d3js.org/d3.v4.js"></script>
-		<script>
-			var margin = {top: 10, right: 10, bottom: 10, left: 10},
-			width = 445 - margin.left - margin.right,	
-			height = 445 - margin.top - margin.bottom;
-			
-			var svg = d3.select("#my_dataviz")
-.append("svg")
-.attr("width", width + margin.left + margin.right)
-.attr("height", height + margin.top + margin.bottom)
-.append("g")
-.attr("transform", "translate(" +margin.left+","+margin.top+")");
-
-// Read data
-d3.csv('asdf.csv', function(data) {
-  // stratify the data: reformatting for d3.j
-  var root = d3.stratify()
-    .id(function(d) { return d.name; })   // Name of the entity (column name is name in csv)
-    .parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
-    (data);
-  root.sum(function(d) { return +d.value })   // Compute the numeric value for each entity
-
-  // Then d3.treemap computes the position of each element of the hierarchy
-  // The coordinates are added to the root object above
-  d3.treemap()
-    .size([width, height])
-    .padding(4)
-    (root)
-
-console.log(root.leaves())
-  // use this information to add rectangles:
-  svg
-    .selectAll("rect")
-    .data(root.leaves())
-    .enter()
-    .append("rect")
-      .attr('x', function (d) { return d.x0; })
-      .attr('y', function (d) { return d.y0; })
-      .attr('width', function (d) { return d.x1 - d.x0; })
-      .attr('height', function (d) { return d.y1 - d.y0; })
-      .style("stroke", "black")
-      .style("fill", "#69b3a2");
-
-  // and to add the text labels
-  svg
-    .selectAll("text")
-    .data(root.leaves())
-    .enter()
-    .append("text")
-      .attr("x", function(d){ return d.x0+10})    // +10 to adjust position (more right)
-      .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
-      .text(function(d){ return d.data.name})
-      .attr("font-size", "15px")
-      .attr("fill", "white")
-})
-		</script>
+		<link rel="stylesheet" href="C:/KNUOS-11team-main/KNUOS-11team-main/app/templates/style.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<h1> Sorting Rising Stocks </h1>
-		<div id = 'my_dataviz'>
+		<div id="tree_map"></div>
+		<div id="tooltip" class="hidden">
+			<p class="heading"><span id="name">word</span>
+			</p>
+			<p class="heading"></p>
+			<p class="indent"><span id="price">5</span>
+			</p>
+			<p class="heading"></p>
+			<p class="indent"><span id="ratio">5</span>
+			</p>
+		</div>
 	</body>
+	<script>
+		var margin = {top: 10, right: 10, bottom: 10, left: 10},
+		width = 1600 - margin.left - margin.right,
+		height = 900 - margin.top - margin.bottom;
+			
+		var svg = d3.select("#tree_map")
+			.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform",
+			"translate(" + margin.left + "," + margin.top + ")");
+	
+		// Read data
+		d3.csv("https://raw.githubusercontent.com/hyeonsu0/KNUOS-11team/main/app/templates/asdf.csv", function(data) {
+		var root = d3.stratify()
+			.id(function(d) { return d.name; })   // Name of the entity (column name is name in csv)
+			.parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
+			(data);
+			root.sum(function(d) { return +d.value })   // Compute the numeric value for each entity
+			d3.treemap()
+			.size([width, height])
+			.padding(10)
+			(root)
+		console.log(root.leaves())
+		svg
+			.selectAll("rect")
+			.data(root.leaves())
+			.enter()
+			.append("a")
+			.attr("xlink:href", function (d) { return "https://finance.naver.com/item/main.nhn?code="+d.data.ticker})
+			.append("rect")
+			.attr('x', function (d) { return d.x0; })
+			.attr('y', function (d) { return d.y0; })
+			.attr('width', function (d) { return d.x1 - d.x0; })
+			.attr('height', function (d) { return d.y1 - d.y0; })
+			.style("stroke", "black")
+			.style("fill", function (d) { 
+			var value = parseFloat(d.data.value)
+				if (value > 15)
+					return "#30be56"
+				else if (value > 10)
+					return "#30974f"
+				else if (value > 5)
+					return "#38694f"
+				return "#69b3a2"})
+			.on("mouseover", function (d, i) {
+			        console.log(d3.select(this));
+			var xPosition = d3.event.pageX;
+			var yPosition = d3.event.pageY;
+				d3.select("#tooltip")
+				.style("left", xPosition + "px")
+				.style("top", yPosition + "px")
+				.select("#name")
+				.text(d.data.name);
+				d3.select("#tooltip")
+				.select("#price")
+				.text(d.data.price);
+				d3.select("#tooltip")
+				.select("#ratio")
+				.text(d.data.ratio);
+				d3.select("#tooltip").classed("hidden", false);
+			})
+			.on("mouseout", function () {
+				d3.select("#tooltip").classed("hidden", true);
+			});
+		svg
+			.selectAll("name")
+			.data(root.leaves())
+			.enter()
+			.append("a")
+			.attr("xlink:href", function (d) { return "https://finance.naver.com/item/main.nhn?code="+d.data.ticker})
+			.append("text")
+			.attr("x", function(d){ return d.x0+((d.x1-d.x0)/5)})    // +10 to adjust position (more right)
+			.attr("y", function(d){ return d.y0+((d.y1-d.y0)/2)})    // +20 to adjust position (lower)
+			.text(function(d){ return d.data.name.substring(0,5)})
+			.attr("font-size", function(d){ return ((d.x1-d.x0)/d.data.ticker.length)+"px"})
+			.attr("fill", "white")
+		svg
+			.selectAll("ratio")
+			.data(root.leaves())
+			.enter()
+			.append("a")
+			.attr("xlink:href", function (d) { return "https://finance.naver.com/item/main.nhn?code="+d.data.ticker})
+			.append("text")
+			.attr("x", function(d){ return d.x0+((d.x1-d.x0)/5)})    // +10 to adjust position (more right)
+			.attr("y", function(d){ return d.y0+((d.y1-d.y0)/2)+(d.x1-d.x0)/d.data.ticker.length})    // +20 to adjust position (lower)
+			.text(function(d){ return d.data.ratio})
+			.attr("font-size", function(d){ return ((d.x1-d.x0)/d.data.ticker.length)/2+"px"})
+			.attr("fill", "white")
+		})
+		</script>
 </html>
