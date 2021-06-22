@@ -8,7 +8,7 @@ app = Flask(__name__)
 def mkcsv(datas):
 	temp = []
 	temp0 = {'name':'name', 'parent':'parent','value':'value','price':'price','ratio':'ratio', 'ticker':'ticker'}
-	temp01 = {'name':'Orgin','parent':'','value':'','price':'','raito':'','ticker':''}
+	temp01 = {'name':'Origin','parent':'','value':'','price':'','raito':'','ticker':''}
 	temp.append(temp0)
 	temp.append(temp01)
 	for data in datas:
