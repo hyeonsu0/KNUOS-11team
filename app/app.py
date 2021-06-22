@@ -11,9 +11,18 @@ def index():
 def crawl():
 	if request.method == 'GET':
 		index = mypkg.get_index()
-		mypkg.getData()
+		try:
+			res = mypkg.search(index)
+			if len(res) <10:
+				mypkg.getData()
+		except:
+			try:
+				mypkg.delete_index(index)
+				mypkg.getData()
+			except:
+				mypkg.getData()
 		res = mypkg.search(index) 
-		return render_template('crawl.html', data = res[0]['_source'])
+		return render_template('crawl.html', data = res)
 #res[0]['_source'] 첫번째 항목 데이터전체
 #res[0]['_source']['name'] 첫번째 항목의 종목명
 #res[0]['_source']['price'] 첫번째 항목의 현재가

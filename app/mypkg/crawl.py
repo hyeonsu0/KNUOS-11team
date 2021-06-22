@@ -22,8 +22,8 @@ def get_index():
 
 def getData():
     index = get_index()
-    if not create_index(index): # index 생성
-        return False
+    if create_index(index): # index 생성
+            return False
     url = url_rise
     result = ""
     res = requests.get(url)
@@ -50,13 +50,16 @@ def getData():
                 'ratio' : ratio,
                 'individual_code' : individual_code}
         res = insert(index, doc_type, data)
-        print(res)
     return True
 
 def create_index(index):
 	if not es.indices.exists(index=index):
 		return es.indices.create(index=index)
 	return False
+
+def delete_index(index):
+	if es.indices.exists(index=index):
+		return es.indices.delete(index=index)
 
 def insert(index, doc_type, body):
 	return es.index(index=index, doc_type=doc_type, body=body)
